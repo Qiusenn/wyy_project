@@ -6,5 +6,6 @@ export default {
   iconIsPlay: false, // 图标改变播放
   UserSongList:[], // 接收用户推荐歌单列表
   SongUrl: '', // 接收音乐url
-  verifyMusic: false // 验证音乐是否可以播放
+  verifyMusic: false, // 验证音乐是否可以播放
+  lyric:'', // 获取歌词
 }

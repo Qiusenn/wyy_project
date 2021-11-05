@@ -16,3 +16,5 @@ export const reqUserSongList = (id) => ajax(`https://apis.netstart.cn/music/play
 export const reqSongUrl = (id) => ajax(`https://apis.netstart.cn/music/song/url?id=${id}`)
 // 获取音乐是否可以播放
 export const reqVerifyMusic = (id) => ajax(`https://apis.netstart.cn/music/check/music?id=${id}`)
+// 获取歌词
+export const reqLyric = (id) => ajax(`https://apis.netstart.cn/music/lyric?id=${id}`)

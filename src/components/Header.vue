@@ -63,4 +63,5 @@ export default {
           border-bottom: 2px solid transparentify
         .a_action
           border-bottom: 2px solid red
+          color: red
 </style>

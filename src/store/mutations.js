@@ -6,7 +6,8 @@ import {
   CHANGE_ICON_PLAY,
   RECEIVE_USER_SONG_LIST,
   RECEIVE_SONG_URL,
-  VERIFY_MUSIC
+  VERIFY_MUSIC,
+  RECEIVE_LYRIC
 } from './mutations-type.js'
 
 export default {
@@ -33,5 +34,8 @@ export default {
   },
   [VERIFY_MUSIC] (state, {verifyMusic}) {
     state.verifyMusic = verifyMusic
+  },
+  [RECEIVE_LYRIC] (state, {lyric}) {
+    state.lyric = lyric
   }
 }

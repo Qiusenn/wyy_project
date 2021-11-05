@@ -17,3 +17,5 @@ export const RECEIVE_USER_SONG_LIST = 'receive_user_song_list'
 export const RECEIVE_SONG_URL = 'receive_song_url'
 // 接收音乐是否能否播放
 export const VERIFY_MUSIC = 'verify_music'
+// 接收歌词
+export const RECEIVE_LYRIC = 'receive_lyric'

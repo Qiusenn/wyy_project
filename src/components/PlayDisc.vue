@@ -1,8 +1,9 @@
 <template>
   <div class="disc">
-    <div class="pointer" :class="{pointer_a:!playState}"></div>
+    <div class="pointer" :class="{pointer_a:playState}"></div>
     <div class="dta" :class="{dta_a:!playState}">
-      <div class="songDisc" :style="{backgroundImage:'url('+receSong.picUrl+')'}"></div>
+      <div class="songDisc" v-if="receSong.song" :style="{backgroundImage:'url('+receSong.picUrl+')'}"></div>
+      <div class="songDisc" v-else-if="receSong.al.name" :style="{backgroundImage:'url('+receSong.al.picUrl+')'}"></div>
     </div>
   </div>
 </template>
@@ -23,12 +24,10 @@ export default {
     }
   }
   .disc
-    margin: 10px auto 0
-    // background-color: pink
+    margin: 0 auto 0
     width 95vw
     height 70vh
-    position: relative
-    
+    position: relative    
     .pointer 
       position: absolute
       top -90px

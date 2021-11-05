@@ -25,7 +25,8 @@
       <span><i class="iconfont icon-24gf-playlist play_list"></i></span>
     </div>
   </div>
-  <playPage 
+  <transition name="fade">
+    <playPage 
     :currentTime="currentTime"
     :playState="playState"
     v-if="shopFullSongPage"
@@ -33,6 +34,7 @@
     :currentDuration="currentDuration"
     @update:current-time="changeCurrentTime"
   />
+  </transition>
 </div>
 </template>
 
@@ -92,11 +94,6 @@ export default {
     ...mapActions(['getSongUrl', 'reqSongUrl']),
     audio_play () { 
       this.playState = !this.playState
-      // if (this.playState) {
-      //     this.$refs.audio.play()
-      //   return
-      // }
-      // this.$refs.audio.pause()
     },
     // 音乐播放 进度条更新事件
     onTimeUpDate () {
@@ -108,8 +105,7 @@ export default {
     },
     changeCurrentTime (n) {
     this.$refs.audio.currentTime = n
-    // console.log(n);
-  }
+    }
   },
 }
 </script>
@@ -123,6 +119,10 @@ export default {
       transform: rotate(360deg)
     }
   }
+  .fade-enter-active, .fade-leave-active
+    transition: opacity .5s
+  .fade-enter, .fade-leave-to
+    opacity 0
   .audio_box
     position: fixed
     bottom: 0
@@ -164,5 +164,6 @@ export default {
         font-size: 25px
       .play_list
         font-size: 25px
+    
 
 </style>

@@ -1,13 +1,21 @@
 <template>
   <div class="page">
     <div class="goback" @click="$parent.shopFullSongPage=false"></div>
-    <div class="mask" :style="{backgroundImage:'url('+receSong.picUrl+')'}"></div>
+    <div class="mask" v-if="receSong.song" :style="{backgroundImage:'url('+receSong.picUrl+')'}"></div>
+    <div class="mask" v-else-if="receSong.al.name" :style="{backgroundImage:'url('+receSong.al.picUrl+')'}"></div>
     <div class="page_title">
       <h5>{{receSong.name}}</h5>
-      <span>{{receSong.song.artists[0].name}}</span>
+      <span v-if="receSong.song">{{receSong.song.artists[0].name}}</span>
+      <span v-else-if="receSong.al.name">{{receSong.al.name}}</span>
     </div>
     <!-- 唱片歌词切换 -->
-    <PlayDisc v-if="showDisc" :receSong="receSong" :playState="playState"/>
+    <PlayDisc v-if="showDisc" @click.native="showDisc = false" :receSong="receSong" :playState="playState"/>
+    <!-- 歌词组件 -->
+    <PlayIyric 
+    v-else 
+    :playState="playState"
+    @click.native="showDisc = true" 
+    :currentTime="currentTime"/>
     <!-- 底部控制 -->
     <div class="footer">
       <div class="bar">
@@ -33,6 +41,8 @@
 
 <script>
 import PlayDisc from './PlayDisc'
+import PlayIyric from './PlayIyric'
+import {mapActions, mapState} from 'vuex'
 export default {
   data() {
     return {
@@ -41,9 +51,13 @@ export default {
       showDisc: true // 默认展示唱片
     }
   },
-  components: {PlayDisc},
+  computed: {
+    ...mapState(['lyric'])
+  },
+  components: {PlayDisc,PlayIyric},
   props: ['receSong','currentTime','playState','currentDuration'],
   methods: {
+    ...mapActions(['getLyric']),
     changePlay () {
       this.$bus.$emit('changeIconPlay',!this.playState)
     },
@@ -52,6 +66,9 @@ export default {
       this.inputing = false;
       this.$emit("update:current-time", this.value);
     },
+  },
+  mounted () {
+    this.getLyric(this.receSong.id)
   },
   watch: {
     currentTime: function (n) {
@@ -69,7 +86,7 @@ export default {
   text-align: center
   top 0
   left: 0
-  background-color: pink
+  // background-color: pink
   width 100vw
   height 100vh
   .goback
@@ -92,7 +109,7 @@ export default {
     overflow: hidden
     background-size: cover
     background-position: center
-    filter: blur(30px) brightness(0.8)
+    filter: blur(15px) brightness(.5);
     transform: scale(1.2);
 
   /* 标题 */

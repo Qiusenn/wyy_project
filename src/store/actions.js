@@ -6,7 +6,8 @@ import {
   CHANGE_ICON_PLAY,
   RECEIVE_USER_SONG_LIST,
   RECEIVE_SONG_URL,
-  VERIFY_MUSIC
+  VERIFY_MUSIC,
+  RECEIVE_LYRIC
 } from './mutations-type.js'
 import {
   reqRecommendSong,
@@ -15,7 +16,8 @@ import {
   reqSearchSuggest,
   reqUserSongList,
   reqSongUrl,
-  reqVerifyMusic
+  reqVerifyMusic,
+  reqLyric
 } from '../api/index'
 
 export default {
@@ -69,5 +71,12 @@ export default {
       const result = await reqVerifyMusic(id)
       const verifyMusic = result.success
       commit(VERIFY_MUSIC, {verifyMusic})
+  },
+  async getLyric ({commit},id) {
+      const result = await reqLyric(id)
+      if (result.code === 200) {
+        const lyric = result
+        commit(RECEIVE_LYRIC, {lyric})
+      }
   }
 }
