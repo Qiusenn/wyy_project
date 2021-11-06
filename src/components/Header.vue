@@ -7,7 +7,6 @@
       <div><router-link to="/songrecommend" active-class="a_action">推荐音乐</router-link></div>
       <div><router-link to="/hot" active-class="a_action">热歌榜</router-link></div>
       <div><router-link to="/search" active-class="a_action">搜索</router-link></div>
-      <div><router-link to="/hotList" active-class="a_action">热门榜单</router-link></div>
     </div>
   </div>
 </template>

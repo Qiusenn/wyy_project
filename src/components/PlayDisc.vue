@@ -35,7 +35,7 @@ export default {
       background: url('../../public/static/images/dvn.png') no-repeat
       width 250px
       height 250px
-      z-index: 6
+      z-index: 4
       background-size: 100px auto
       transform-origin: 12px 23px
       transition: all .5s

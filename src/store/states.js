@@ -8,4 +8,6 @@ export default {
   SongUrl: '', // 接收音乐url
   verifyMusic: false, // 验证音乐是否可以播放
   lyric:'', // 获取歌词
+  alikeSongList: [], // 获取搜索关键字的相似歌曲
+  currentPlaySongList: [] // 当前播放列表
 }

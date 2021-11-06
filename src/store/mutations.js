@@ -7,7 +7,9 @@ import {
   RECEIVE_USER_SONG_LIST,
   RECEIVE_SONG_URL,
   VERIFY_MUSIC,
-  RECEIVE_LYRIC
+  RECEIVE_LYRIC,
+  RECEIVE_ALIKE_SONG_LIST,
+  UPDATE_CURRENT_SONG_LIST
 } from './mutations-type.js'
 
 export default {
@@ -37,5 +39,12 @@ export default {
   },
   [RECEIVE_LYRIC] (state, {lyric}) {
     state.lyric = lyric
+  },
+  [RECEIVE_ALIKE_SONG_LIST] (state, {alikeSongList}) {
+    state.alikeSongList = alikeSongList
+  },
+  // 修改当前播放歌单
+  [UPDATE_CURRENT_SONG_LIST] (state, {newSongList}) {
+    state.currentPlaySongList = newSongList
   }
 }

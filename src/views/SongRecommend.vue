@@ -49,13 +49,16 @@ export default {
   props: ['playState'],
   components: {SongItem},
   methods: {
-    ...mapActions(['getRecommendSong', 'getNewestSong']),
+    ...mapActions(['getRecommendSong', 'getNewestSong','UpdateCurrentSongList']),
     // 排他
     app (e,index) {
       // 将当前isPlay设置为当前点击的组件下标
       this.isPlay = index
-      
     }
+  },
+  updated () {
+    console.log(123);
+    this.UpdateCurrentSongList(this.newestSong)
   },
   mounted () {
     this.getRecommendSong()

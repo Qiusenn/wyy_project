@@ -2,13 +2,13 @@
   <div class="search">
     <div class="search_input">
       <span><i class="iconfont icon-sousuo"></i></span>
-      <input @input="search_song()" type="text" placeholder="搜索歌曲、歌手、专辑" v-model="searchVal">
+      <input @input="search_song()" @keyup.enter="searchKeySong()" type="text" placeholder="搜索歌曲、歌手、专辑" v-model="searchVal">
     </div>
     <div class="search_All" v-if="!searchVal.length">
       <!-- 热门搜索 -->
       <h6>热门搜索</h6>
       <ul class="search_hot" >
-        <li v-for="(hot, index) in hotsong.hots" :key="index">{{hot.first}}</li>
+        <li v-for="(hot, index) in hotsong.hots" :key="index" @click="searchKeySong(hot)" >{{hot.first}}</li>
       </ul>
 
       <!-- 搜索记录 -->
@@ -19,9 +19,20 @@
       </ul>
     </div>
     <div v-else class="search_info">
+
       <h3>搜索"{{searchVal}}"</h3>
-      <ul>
-        <li v-for="song in searchSuggest.songs" :key="song.id"><span><i class="iconfont icon-sousuo"></i></span>{{song.name}}</li>
+      <ul v-if="!isShowKeySongs" class="SearchSuggest">
+        <li v-for="song in searchSuggest.songs" @click="searchKeySong(song)" :key="song.id"><span><i class="iconfont icon-sousuo"></i></span>{{song.name}}</li>
+      </ul>
+
+      <ul v-else class="searchKeywordList">
+        <SongItem
+        v-for="(alikeSong,index) in alikeSongList" :key="alikeSong.id"
+        :song="alikeSong" :index="index" 
+        :playState="playState"
+        :isPlay="isPlay"
+        @click.native="app($event,index)"
+        />
       </ul>
     </div>
   </div>
@@ -30,19 +41,53 @@
 
 <script>
 import {mapState, mapActions} from 'vuex'
+import SongItem from '../components/SongItem.vue'
 export default {
   data() {
     return {
-      searchVal: ''
+      searchVal: '',
+      isShowKeySongs: false,
+      isPlay: null,
     }
   },
+  props: ['playState'],
+  components: {SongItem},
   computed: {
-    ...mapState(['hotsong', 'searchSuggest'])
+    ...mapState(['hotsong', 'searchSuggest','alikeSongList','currentPlaySongList'])
   },
   methods: {
-    ...mapActions(['getHotSong']),
+    ...mapActions(['getHotSong','getAlikeSongList','UpdateCurrentSongList']),
     search_song () {
       this.$store.dispatch('getSearchSuggest',this.searchVal)
+    },
+      
+    app (e,index) {
+      // 将当前isPlay设置为当前点击的组件下标
+      this.isPlay = index
+  },
+    // 搜索建议被点击获取请求数据，渲染页面
+    searchKeySong (songs=this.searchVal) {
+      // 获取当前关键词
+      let name = songs.name || songs.first || this.searchVal
+      if (songs.first) {
+        this.searchVal = name
+      }
+      this.isShowKeySongs = true
+      // 请求数据
+      this.getAlikeSongList(name)
+
+    }
+  },
+  watch: {
+    // 监视表单值当输入框为空时，退出搜索关键词界面
+    searchVal (n) {
+      if (!n) {
+        this.isShowKeySongs = false
+      }
+    },
+    alikeSongList (n) {
+      // console.log(n);
+      this.UpdateCurrentSongList(n)
     }
   },
   mounted () {
@@ -125,7 +170,7 @@ export default {
         line-height: 50px;
         color: #507daf;
         border-bottom: 1px solid #EBECEC
-      ul
+      .SearchSuggest
         padding-left: 30px
         li 
           position: relative
@@ -136,5 +181,7 @@ export default {
             position: absolute
             top 17px
             left -22px
+      .searchKeywordList
+        padding-left: 10px
 
 </style>

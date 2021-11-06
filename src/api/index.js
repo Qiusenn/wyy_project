@@ -9,7 +9,9 @@ export const reqNewestSong = () => ajax('https://apis.netstart.cn/music/personal
 // 请求热搜列表
 export const reqHotSong = () => ajax('https://apis.netstart.cn/music/search/hot')
 // 请求搜索建议
-export const reqSearchSuggest = (keyword) => ajax(`https://apis.netstart.cn/music/search/suggest?keywords=${keyword}`)
+export const reqSearchSuggest = (keyword) => ajax(`https://apis.netstart.cn/music/search?keywords=${keyword}`)
+// 获取点击的input值并搜索显示对应的歌曲，(相同相似的歌曲)
+export const reqAlikeSongList = (keyword) => ajax(`https://apis.netstart.cn/music/cloudsearch?keywords=${keyword}`)
 // 获取用户推荐歌单
 export const reqUserSongList = (id) => ajax(`https://apis.netstart.cn/music/playlist/detail?id=${id}`)
 // 获取音乐url

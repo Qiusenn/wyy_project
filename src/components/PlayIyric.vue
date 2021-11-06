@@ -1,5 +1,5 @@
 <template>
-  <div class="iyric">
+  <div class="iyric" :class="{playing:playState}">
     <ul class="content" ref="lisEl" 
     :style="{
       marginTop: `${ulHeight/2}px`,
@@ -9,7 +9,13 @@
       v-for="(parsedL,index) in parsedLyric" 
       :key="index"
       :class="{active: currentLyricIndex === index}"
-      ><span :class="{action_a:playState}">{{parsedL.text || '---'}}</span></li>
+      ><span
+      :class="{aaa:!playState}"
+      :style="{
+        animationDuration: `${
+          index === parsedLyric.length - 1? 5: parsedLyric[index + 1].time - parsedL.time}s`,
+      }"
+      >{{parsedL.text || '---'}}</span></li>
     </ul>
   </div>
 </template>
@@ -27,9 +33,9 @@ export default {
   mounted () {
     this.ulHeight = this.$refs.lisEl.offsetHeight
   },
-  props: ['currentTime'],
+  props: ['currentTime','playState'],
   computed: {
-    ...mapState(['lyric', 'playState']),
+    ...mapState(['lyric']),
     // 原始数据
     parsedLyric () {
       return this.lyric.lrc.lyric
@@ -74,7 +80,8 @@ export default {
         return total + liEl.offsetHeight
       },0)
       this.frontLisHeight = -frontLisHeight + 'px'
-    }
+    },
+
   }
 
 };
@@ -92,7 +99,6 @@ export default {
   .iyric
     width 95vw
     height 70vh
-    // background-color: pink
     margin: 10px auto 0
     overflow: hidden
     mask-image: linear-gradient(
@@ -102,7 +108,6 @@ export default {
         transparent 95% 100%
       );
     .content
-      
       transition: transform .3s
       width 100%
       height 100%
@@ -112,9 +117,6 @@ export default {
       li
         display: inline-block
         line-height: 30px
-        span 
-        &.action_a
-          animation-play-state: paused
         &.active
           span
           /* 行高 */
@@ -125,7 +127,9 @@ export default {
             color: transparent;
             animation: lyric 3s linear 0s;
             animation-play-state: running;
-            animation-direction: 5s
+            &.aaa
+              animation-play-state: paused
+            
             
             
 

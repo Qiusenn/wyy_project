@@ -5,7 +5,8 @@
       <div>
         <h5>{{ song.name }}</h5>
         <i class="sghot"></i>
-        <span class="song_name">{{song.song.artists[0].name}}</span>
+        <span class="song_name" v-if="song.song">{{ song.song.artists[0].name }}</span>
+        <span class="song_name" v-else>{{ song.al.name }}</span>
       </div>
       <span class="play_icon" v-if="isPlay === index && playState"><i class="iconfont icon_play icon-zanting"></i></span>
       <span class="play_icon" v-else><i class="iconfont icon_play icon-bofang" ></i></span>
@@ -31,13 +32,13 @@ export default {
       this.getSongUrl(this.song.id)
       this.$bus.$emit('changeIconPlay',!this.playState)
       // 异步延时调用方法
-      setTimeout(() => {
+      // setTimeout(() => {
         if (this.playState) {
         this.$parent.$parent.$refs.audio.play();
         return
       }
       this.$parent.$parent.$refs.audio.pause()
-      }, 300);
+      // }, 300);
       
     }
   }

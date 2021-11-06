@@ -20,9 +20,18 @@
       @durationchange="onDuraTionChange"
       @timeupdate="onTimeUpDate" 
       v-else src="https://www.w3school.com.cn/i/song.ogg"></audio>
-      <span v-if="playState" @click="audio_play"><i class="iconfont icon_play icon-zanting" ></i></span>
-      <span v-else @click="audio_play()"><i class="iconfont icon_play icon-bofang"></i></span>
-      <span><i class="iconfont icon-24gf-playlist play_list"></i></span>
+      <span v-if="playState" @click="audio_play" class="span_icon">
+        <i class="iconfont icon_play icon-24gl-pause" ></i>
+        <canvas width="36" ref="canvas" height="36" 
+      style="display:block;width:30px;height:30px"></canvas>
+        </span>
+      <span v-else @click="audio_play()" class="span_icon">
+        <i class="iconfont icon_play icon-24gl-play"></i>
+        <canvas width="36" ref="canvas" height="36" 
+      style="display:block;width:30px;height:30px"></canvas>
+      </span>
+      
+      <span @click="showSongList = true"><i class="iconfont icon-24gf-playlist play_list"></i></span>
     </div>
   </div>
   <transition name="fade">
@@ -35,6 +44,14 @@
     @update:current-time="changeCurrentTime"
   />
   </transition>
+  <transition name="fade">
+  <MaskBg
+  v-if="showSongList"
+  :showSongList="showSongList"
+  :playState="playState"
+  @uptada:showSongList="showSongList=$event"
+  />
+  </transition>
 </div>
 </template>
 
@@ -44,6 +61,7 @@ import { mapState, mapActions} from 'vuex'
 
 import Header from './components/Header'
 import playPage from './components/PlayPage'
+import MaskBg from './components/Mask'
 export default {
   data() {
     return {
@@ -51,13 +69,14 @@ export default {
       playState: false, // 播放状态
       shopFullSongPage: false, // 是否全屏展示当前唱片
       currentTime: 0, // 当前播放音乐的播放长度(实时更新)
-      currentDuration: 0 // 当前音乐的总时长
+      currentDuration: 0, // 当前音乐的总时长
+      showSongList: false // 是否弹出列表
     }
   },
   computed: {
     ...mapState(['iconIsPlay', 'SongUrl', 'verifyMusic','newestSong']),
   },
-  components: {Header,playPage},
+  components: {Header,playPage,MaskBg},
   mounted () {
     // 全局事件总线，接收点击歌曲的数据
     this.$bus.$on('receiveSong', receSong => {
@@ -88,6 +107,24 @@ export default {
       if (n === this.currentDuration) {
         this.playState = !this.playState
       }
+      let content = this.$refs.canvas.getContext("2d")
+      content.clearRect(0,0,36,36),
+      content.beginPath()
+      content.arc(18,18,17,(Math.PI / 180) * 360 * (this.currentTime / this.currentDuration) - 90,
+      (Math.PI / 180) * 360)
+      content.strokeStyle = "#ccc";
+      content.stroke();
+      content.closePath();
+      content.beginPath();
+      content.arc(
+        18,
+        18,
+        17,
+        (Math.PI / 180) * 0 - 90,
+        (Math.PI / 180) * 360 * (this.currentTime / this.currentDuration) - 90
+      );
+      content.strokeStyle = "red";
+      content.stroke();
     }
   },
   methods: {
@@ -105,12 +142,15 @@ export default {
     },
     changeCurrentTime (n) {
     this.$refs.audio.currentTime = n
-    }
+    },
+    // showSongListFn (bool) {
+    //   this.showSongListFn = bool
+    // }
   },
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
   @keyframes rotatoImg {
     from {
       transform: rotate(0deg)
@@ -157,13 +197,20 @@ export default {
         margin-left: 60px
 
     .audio_box_right
+      .span_icon
+        display: flex
+        align-items: center
+        position: relative
       width 20%
       display: flex
       justify-content: space-around
       .icon_play
-        font-size: 25px
+        position: absolute
+        top 1px
+        left 9px
+        font-size: 15px
       .play_list
-        font-size: 25px
+        font-size: 20px
     
 
 </style>

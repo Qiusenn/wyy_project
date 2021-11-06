@@ -34,11 +34,16 @@ export default {
     };
   },
   mounted () {
-    // this.$store.dispatch('getUserSongList',this.$route.query.id)
     this.getUserSongList(this.$route.query.id)
   },
+  updated () {
+    if (this.currentPlaySongList === this.UserSongList.tracks) {
+      return
+    }
+    this.UpdateCurrentSongList(this.UserSongList.tracks)
+  },
   methods: {
-    ...mapActions(['getUserSongList']),
+    ...mapActions(['getUserSongList', 'UpdateCurrentSongList']),
     // 排他
     app (e,index) {
       index = index - 2
@@ -46,7 +51,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['UserSongList'])
+    ...mapState(['UserSongList', 'currentPlaySongList'])
   },
   components: {SongItem_second}
 };

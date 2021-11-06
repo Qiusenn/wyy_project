@@ -7,7 +7,9 @@ import {
   RECEIVE_USER_SONG_LIST,
   RECEIVE_SONG_URL,
   VERIFY_MUSIC,
-  RECEIVE_LYRIC
+  RECEIVE_LYRIC,
+  RECEIVE_ALIKE_SONG_LIST,
+  UPDATE_CURRENT_SONG_LIST
 } from './mutations-type.js'
 import {
   reqRecommendSong,
@@ -17,7 +19,8 @@ import {
   reqUserSongList,
   reqSongUrl,
   reqVerifyMusic,
-  reqLyric
+  reqLyric,
+  reqAlikeSongList
 } from '../api/index'
 
 export default {
@@ -78,5 +81,16 @@ export default {
         const lyric = result
         commit(RECEIVE_LYRIC, {lyric})
       }
+  },
+  async getAlikeSongList ({commit},keyword) {
+      const result = await reqAlikeSongList(keyword)
+      if (result.code === 200) {
+        const alikeSongList = result.result.songs
+        commit(RECEIVE_ALIKE_SONG_LIST, {alikeSongList})
+      }
+  },
+  // 更新当前播放歌单
+  UpdateCurrentSongList ({commit},newSongList) {
+    commit(UPDATE_CURRENT_SONG_LIST,{newSongList})
   }
 }

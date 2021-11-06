@@ -9,6 +9,7 @@
       <span v-else-if="receSong.al.name">{{receSong.al.name}}</span>
     </div>
     <!-- 唱片歌词切换 -->
+    <keep-alive>
     <PlayDisc v-if="showDisc" @click.native="showDisc = false" :receSong="receSong" :playState="playState"/>
     <!-- 歌词组件 -->
     <PlayIyric 
@@ -16,6 +17,7 @@
     :playState="playState"
     @click.native="showDisc = true" 
     :currentTime="currentTime"/>
+    </keep-alive>
     <!-- 底部控制 -->
     <div class="footer">
       <div class="bar">
@@ -33,28 +35,38 @@
         <span></span>
         <span @click="changePlay" :class="{action:playState}" ></span>
         <span></span>
-        <span></span>
+        <span @click="showSongList = true"></span>
       </div>
     </div>
+
+      <MaskBg
+        v-if="showSongList"
+        :showSongList="showSongList"
+        :playState="playState"
+        @uptada:showSongList="showSongList=$event"
+      />
+
   </div>
 </template>
 
 <script>
 import PlayDisc from './PlayDisc'
 import PlayIyric from './PlayIyric'
+import MaskBg from './Mask'
 import {mapActions, mapState} from 'vuex'
 export default {
   data() {
     return {
       inputing: false,
       value: this.currentTime,
-      showDisc: true // 默认展示唱片
+      showDisc: true, // 默认展示唱片
+      showSongList:false
     }
   },
   computed: {
     ...mapState(['lyric'])
   },
-  components: {PlayDisc,PlayIyric},
+  components: {PlayDisc,PlayIyric,MaskBg},
   props: ['receSong','currentTime','playState','currentDuration'],
   methods: {
     ...mapActions(['getLyric']),
@@ -81,6 +93,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+
 .page
   position: fixed
   text-align: center

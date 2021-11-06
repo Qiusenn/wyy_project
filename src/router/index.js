@@ -4,7 +4,6 @@ import Hot from '../views/Hot'
 import Search from '../views/Search'
 import SongRecommend from '../views/SongRecommend'
 import SongCarList from '../views/SongCarList'
-import HotList from '../views/HotList'
 
 Vue.use(VueRouter)
 
@@ -31,11 +30,6 @@ const routes = [
   {
     path: '/',
     redirect: '/songrecommend',
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/hotList',
-    component: HotList,
     meta: { requiresAuth: true }
   },
 ]

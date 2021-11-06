@@ -19,3 +19,7 @@ export const RECEIVE_SONG_URL = 'receive_song_url'
 export const VERIFY_MUSIC = 'verify_music'
 // 接收歌词
 export const RECEIVE_LYRIC = 'receive_lyric'
+// 接收相似关键词歌曲
+export const RECEIVE_ALIKE_SONG_LIST = 'receive_alike_song_list'
+// 更新当前播放歌单
+export const UPDATE_CURRENT_SONG_LIST = 'update_current_song_list'
